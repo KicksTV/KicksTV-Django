@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Assignments Page{% endblock %}
+{% block assignments_active %}active{% endblock %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<h1>Coarse Work Page</h1><br>
+			<div class="col-md-10">
+				<h2>{{ module.module_name }}</h2>
+				{% if module.coarseWork_set.all %}
+					{% for coarseWork in module.coarseWork_set.all %}
+					<li><a href="">{{ coarseWork.coarseWork_title }}</a></li>
+					{% endfor %}
+				{% else %}
+					<h3>No coarse work avaliable!</h3>
+				{% endif %}
+			</div>
+			<div class="col-md-2">
+				<a href="{% url 'coarseWork-create' module.id %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-plus"></span></a>
+				<a href="{% url 'module-delete' module.id %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-trash"></span></a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

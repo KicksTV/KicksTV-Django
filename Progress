@@ -1,0 +1,54 @@
+--- Issues ---
+
+ - Home page images look terrible for mobile users (Only iphone users).
+
+ - When rotating mobile to landscape mode, image size does not update.
+
+ - Dropbox buttons are not updated.
+
+ - Titles & buttons for images in the detail.html need to be smaller for mobile
+
+ - Forms need to be ajusted for mobile
+
+ - Add breadcrumbs for easy navigation around the site.
+
+ - Fix user sign up
+
+ - Add human verification to prevent bots from spamming sign up.
+
+ - Blogs should be able to be set to private or not published, same with gallery's.
+ 
+ - Gallery's should show the user who owns the gallery.
+
+ - Need to fix buttons on details page for gallery, when screen size gets smaller.
+
+ - ConfirmDelete.html can be improved by including it into base rather than each page individually.
+
+ - Login form for mobile needs to be improved.
+
+ - Add slug for blog
+
+--- Improvements ---
+
+ - When creating a post for a project, user should get option to add HTML or plain text.
+
+
+--- Features to Add ---
+
+ - Comment section for user to comment on gallery's or posts.
+
+ - User profile so that users can see all there content.
+
+
+
+
+
+--- Fixes Already Done ---
+
+ - Listed posts for projects show all of the posts content not just the beginning lines.
+
+ - When deleting a Gallery or Image, the actual file is not deleted.
+
+ - When deleting a Gallery, the whole folder of images should be deleted.
+
+ - Remove Home button from navbar and make "KicksTV" go to homepage.

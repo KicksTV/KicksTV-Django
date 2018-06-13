@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% block title %}Home Page{% endblock %}
+{% block home_active %}active{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+	<div class="container-fluid home-page-gallery">
+		<div id="imgConHome" class="col-md-12" style="opacity: 0;">
+			<div class="row" style="height: 100%;">
+				<div class="arrowContainer-left col-sm-1 col-xs-2" style="white-space: nowrap;height: 100%;">
+					<span class="helper"></span><img class="Arrow" src="{% static 'img/back.svg' %}" onClick="preImage()">
+				</div>
+				<div class="col-md-10 col-sm-10 col-xs-8"></div>
+				<div class="arrowContainer-right col-sm-1 col-xs-2" style="white-space: nowrap;height: 100%;">
+					<span class="helper"></span><img class="Arrow" src="{% static 'img/next.svg' %}" onClick="nextImage()">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container" style="height: 550px;">
+		<div class="col-md-12">
+			<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
+				<div class="panel-heading">
+					<h3 class="panel-title">Blog</h3>
+				</div>
+				<div class="panel-body">
+					<div class="col-md-12">
+						{% if all_projects %}
+							<div class="row row-fix">
+								{% for project in all_projects %}
+									<div class="col-xs-12 col-sm-4 col-md-4">	
+										<div class="thumbnail">
+										 	<a href="{% url 'blogs:project-detail' project.id %}"><img class="img-responsive" src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
+										 	<div class="caption">
+								        		<h4>{{ project.name }}</h4>
+								        		<p>{{ project.timestamp|timesince }} ago</p>
+								        		<p>{{ project.description|truncatechars:180 }}</p>
+								      		</div>
+										</div>
+									</div>
+									{% cycle "" "" "</div><div class='row row-fix'>" %}
+								{% endfor %}
+								</div>
+								<div class="pagination">
+									<span class="step-links">
+									{% if all_projects.has_previous %}
+										<a href="?page={{ all_projects.previous_page_number }}">previous</a>
+									{% endif %}
+
+									<span class="current">
+										Page {{ all_projects.number }} of {{ all_projects.paginator.num_pages }}.
+									</span>
+
+									{% if all_projects.has_next %}
+										<a href="?page={{ all_projects.next_page_number }}">next</a>
+									{% endif %}
+									</span>
+								</div>
+							{% else %}
+								<h3>No projects!</h3>
+							</div>	
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<!-- <div class="col-md-2">
+			<div class="panel panel-success">
+				<div class="panel-heading">MC Server</div>
+				<div class="panel-body">
+					<div class="col-md-6">
+						<p>
+							{% if hostname %}
+								{{ hostname }}
+							{% else %}
+								Error
+							{% endif %}
+						</p>
+					</div>
+					<div class="col-md-6" style="height: 30px">
+						<h4 style="margin-top: 0px;">
+							{% if serverStatus == "success" %}
+							<span class="label label-success" style="float: right;">Online</span>
+							{% else %}
+							<span class="label label-danger" style="float: right;">Offline</span>
+							{% endif %}
+						</h4>
+					</div>
+					<div class="col-md-6"><p>Players</p></div>
+					<div class="col-md-6"><p style="float: right;">{{ onlinePlayers }}/{{ maxPlayers }}</p></div>
+				</div>
+			</div>
+			<div class="panel panel-success">
+				<div class="panel-heading">Player List</div>
+				<div style="overflow-y: scroll; height: 300px;">
+					{% if list %}
+						{% for player in list %}
+							<div class="panel-body">
+								{{ player }}
+							</div>
+						{% endfor %}
+					{% else %}
+						<div class="panel-body">
+							Error: no players
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		</div> -->
+		
+
+		<!-- <div class="col-md-2" >
+			<iframe style="float:right;" src="https://discordapp.com/widget?id=355323843046539264&theme=dark" width="300" height="500" allowtransparency="true" frameborder="0"></iframe>
+		</div>	 -->	
+	
+	
+	{% if desktop_gallery %}
+	<script type="text/javascript">
+		var preImageContainer = document.getElementById("preImageContainer");
+		var nextImageContainer = document.getElementById("nextImageContainer");
+		
+
+		var imgN = 0;
+		var imgConHome = document.getElementById("imgConHome");
+		var myDesktopGallery = new Object();
+		var myMobileGallery = new Object();
+		var allImages = [];
+		var i = 0;
+		var opc = 0;
+
+		var fadeOutTimer;
+		var fadeInTimer;
+
+		{% for image in desktop_gallery.image_set.all %}
+			myDesktopGallery.image{{ image.id }} = {
+				file_path: "{{ image.image_image.url }}"
+			};
+		{% endfor %}
+
+		{% for image in mobile_gallery.image_set.all %}
+			myMobileGallery.image{{ image.id }} = {
+				file_path: "{{ image.image_image.url }}"
+			};
+		{% endfor %}
+
+
+		if (window.screen.width >= 767) {
+			for (images in myDesktopGallery) {
+				allImages[i] = myDesktopGallery[images].file_path;
+				i +=1
+			}
+		}
+
+		if (window.screen.width <= 479) {
+			for (images in myMobileGallery) {
+				allImages[i] = myMobileGallery[images].file_path;
+				i +=1
+			}
+		}
+
+
+		function fadeImageOut() {			
+			if (imgConHome.style.opacity <= 0) {
+				console.log("stopping fadding");
+				clearInterval(fadeOutTimer);
+				setTimeout(setImage, 1500);
+			}
+			else {
+				console.log("fading");
+				imgConHome.style.opacity = opc;
+				opc -= 0.05;	
+			}
+		}
+
+		function fadeImageIn() {			
+			if (imgConHome.style.opacity >= 1) {
+				console.log("stopping fadding");
+				clearInterval(fadeInTimer);
+			}
+			else {
+				console.log("fading");
+				imgConHome.style.opacity = opc;
+				opc += 0.05;		
+			}
+		}
+
+		function setImage() {
+			if (imgN >= allImages.length ) {
+				imgN = 0;
+			}
+			else if (imgN < 0 ) {
+				imgN = allImages.length-1;
+			}
+			if (imgConHome.style.opacity >= 1) {
+				fadeImageOut();
+				fadeOutTimer = setInterval(fadeImageOut, 50);
+			}
+			
+			if (imgConHome.style.opacity <= 0) {
+				if (window.screen.width < 767) {
+					imgConHome.style.background = "url('" + allImages[imgN] + "')";
+					imgConHome.style.backgroundSize = "100% 100%";
+					imgConHome.style.backgroundRepeat = "no-repeat";
+					imgConHome.style.backgroundAttachment = "fixed";
+					imgConHome.style.backgroundPosition = "center";
+				}else {
+					imgConHome.style.background = "url('" + allImages[imgN] + "') no-repeat center center fixed";
+				}
+				setTimeout(fadeInTimer = setInterval(fadeImageIn, 50), 8000);
+				
+			}
+		}
+
+
+
+		function nextImage() {
+			imgN += 1
+			clearInterval(setImageTimer);
+			setImageTimer = setInterval(nextImage, 9000);
+			setImage();
+		}
+
+		function preImage() {
+			imgN -= 1
+			clearInterval(setImageTimer);
+			setImageTimer = setInterval(setImage, 9000);
+			setImage();
+		}
+
+
+		setImage();		
+		var setImageTimer = setInterval(nextImage, 9000);
+
+		
+
+
+	</script>
+	{% endif %}
+{% endblock %}

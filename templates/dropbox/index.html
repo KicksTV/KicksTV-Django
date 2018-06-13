@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %}Assignments Page{% endblock %}
+{% block dropbox_active %}active{% endblock %}
+
+
+{% block content %}
+	<div class="container" style="margin-top: 50px;">
+		<div class="row">
+			<div class="col-md-offset-1 col-md-10">
+				<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
+					<div class="panel-heading" style="padding: 0 0 0 15px;">
+						<h3 class="panel-title" style="display: inline-block;">DropBox Folders</h3>
+						<div>
+							<button class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</button>
+							<button class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+							</button>
+							<button class="btn btn-default btn-xs">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</button>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div style="overflow-y: scroll;height: 400px;">
+							{% if allGroups %}
+								{% for group in allGroups %}
+									<div class="col-md-12 folder">
+										<div class="col-md-12 folder-container">
+											<img class="folder-icon" src="{% static 'img/folder_icon.svg' %}">
+											<h4 style="display: inline">{{ group.0.path_lower }}</h4>
+										</div>
+									{% for file in group %}
+										<div class="col-md-offset-1 col-md-11 file">
+											<img class="folder-icon" src="{% static 'img/file_icon.svg' %}">
+											<p style="display: inline">{{ file.file_name }}</p>
+											<a style="float: right;margin-right: 10px;" href="{% url 'dropbox:fileDownload' file.path_lower %}" class="btn-xs btn-default" role="button"><span class="glyphicon glyphicon-download"></span></a>
+										</div>
+									{% endfor %}						
+									</div>	
+								{% endfor %}
+							{% else %}
+								<h4>No folders have been created!</h4>
+							{% endif %}
+							</div>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

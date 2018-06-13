@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Blog Page{% endblock %}
+{% block blog_active %}active{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+	<div class="container" style="margin-top: 50px;">
+		<div class="row row-fix">
+			<div class="col-md-12">
+				<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
+					<div class="panel-heading" style="padding: 0 0 0 15px;">
+						<h3 class="panel-title" style="display: inline-block;">Blog</h3>
+						<a href="{% url 'blogs:project-add' %}">
+							<button class="btn btn-default panel-btn">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</button>
+						</a>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-12">
+							{% if all_projects %}
+								<div class="row row-fix">
+								{% for project in all_projects %}
+									<div class="col-sm-4 col-md-4">	
+										<div class="thumbnail">
+										 	<a href="{% url 'blogs:project-detail' project.slug %}"><img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
+										 	<div class="caption">
+								        		<h4>{{ project.name }}</h4>
+								        		<p>{{ project.timestamp|timesince }} ago</p>
+								        		<p>{{ project.description }}</p>
+								      		</div>
+										</div>
+									</div>
+
+									{% cycle "" "" "</div><div class='row row-fix'>" %}
+								{% endfor %}
+								</div>
+								<div class="pagination">
+									<span class="step-links">
+									{% if all_projects.has_previous %}
+										<a href="?page={{ all_projects.previous_page_number }}">previous</a>
+									{% endif %}
+
+									<span class="current">
+										Page {{ all_projects.number }} of {{ all_projects.paginator.num_pages }}.
+									</span>
+
+									{% if all_projects.has_next %}
+										<a href="?page={{ all_projects.next_page_number }}">next</a>
+									{% endif %}
+									</span>
+								</div>
+								{% else %}
+									<h3>No projects!</h3>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

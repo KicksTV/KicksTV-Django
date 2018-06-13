@@ -1,0 +1,36 @@
+--- Heroku ---
+heroku login
+heroku -version
+heroku git:remote -a "appname"
+
+
+- install heroku -
+sudo add-apt-repository "deb https://cli-assets.heroku.com/branches/stable/apt ./"
+curl -L https://cli-assets.heroku.com/apt/release.key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install heroku 
+
+--- Git ---
+git remote -v    give repositories
+git clone "url"
+git add "filename"
+git add -A            adds all files
+git commit -m ""
+git push
+
+--- PIP ---
+
+sudo pip install - global install
+pip install - env install
+pip freeze
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+--- Removing Git History ---
+git checkout --orphan newBranch
+git add -A  # Add all files and commit them
+git commit
+git branch -D master  # Deletes the master branch
+git branch -m master  # Rename the current branch to master
+git push -f origin master  # Force push master branch to github
+git gc --aggressive --prune=all     # remove the old files

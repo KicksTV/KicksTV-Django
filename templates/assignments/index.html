@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load filters %}
+
+
+{% block title %}Assignments Page{% endblock %}
+{% block assignments_active %}active{% endblock %}
+
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<h1>Modules Page</h1><br>
+			<div class="col-md-10">
+				<h2>DropBox Folders:</h2><br>
+
+				{% if allFolders %}
+					{% for folder in allFolders %}
+						<ul>
+							<li class="folder" style="">
+								<h3 style="display: inline-block;"><img class="folder-icon" src="{% static 'img/folder_icon.svg' %}"></h3>
+								<h3 style="display: inline">{{ folder.folder_name }}</h3>
+							</li>
+							{% if test|runFiles:folder %}
+							<ul>
+								{% for file in test|runFiles:folder %}
+									<li class="sub-folder">
+										<h4 style="display: inline-block;">
+											<img class="folder-icon" src="{% static 'img/folder_icon.svg' %}">
+										</h4>
+										<h4 style="display: inline-block;">{{ file.file_name }}</h4>
+									</li>
+								{% endfor %}
+							{% else %}
+								<li><h4>Folder is empty!</h4></li>
+							{% endif %}
+							</ul>
+						</ul>
+					{% endfor %}
+				{% else %}
+					<h4>No folders have been created!</h4>
+				{% endif %}
+				
+				
+			</div>
+		</div>
+	</div>
+{% endblock %}
