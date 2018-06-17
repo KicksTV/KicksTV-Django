@@ -10,7 +10,7 @@
 				<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
 					<div class="panel-heading" style="padding: 0 0 0 15px;">
 						{% if post %}
-							<h3 class="panel-title" style="display: inline-block;">{{ post.title }}</h3>
+							<h3 class="panel-title" style="display: inline-block;">{{ post.title|title }}</h3>
 						{% else %}
 							<h3 class="panel-title" style="display: inline-block;">Post not found</h3>
 						{% endif %}
@@ -34,7 +34,7 @@
 						<div class="col-md-10">
 							{% if post %}
 								<p>
-									Posted - {{ post.timestamp }}<br>
+									Published - {{ post.publish }}<br>
 									Last Update - {{ post.updated }}
 								</p>
 								<p class="post-content">{{ post.content|linebreaks }}</p>

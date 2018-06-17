@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import Permission, User
+from django.conf import settings
+
 from django.urls import reverse
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
@@ -20,13 +22,14 @@ def upload_location(instance, filename):
 
 
 class Project(models.Model):
-	user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
 	name = models.CharField(max_length=60)
 	image = models.FileField(upload_to=upload_location, 
 		null=False, 
 		blank=False,)
 	timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
 	slug = models.SlugField(max_length=60, unique=True)
+	on_going = models.BooleanField(default=True)
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 	description = models.CharField(max_length=70)
 
@@ -47,6 +50,8 @@ class Post(models.Model):
 	content = models.TextField()
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 	timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)
+	draft = models.BooleanField(default=True)
+	publish = models.DateField(auto_now=False, auto_now_add=False)
 
 	def __unicode__(self):
 		return self.title

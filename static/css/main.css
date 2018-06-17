@@ -50,6 +50,27 @@ a>.btn {
 .caption>a>div>span {
 	color: white;
 }
+.obj-title {
+	color: #337ab7;
+	font-weight: bold;
+	margin: 0 0 10px 0;
+}
+.no-margin {
+	margin: 0 0 0 0;
+}
+.tag {
+	margin: 0 0 10px 0;
+}
+.caption>.obj-user {
+	margin: 0 0 0 0;
+}
+.caption>.obj-desc {
+	margin: 20px 0 10px 0;
+}
+.caption>.obj-date {
+	color: #777;
+	margin: 0 0 0 0;
+}
 .navbar {
 	border-radius: 0px;
 	margin-bottom: 0;
@@ -92,16 +113,10 @@ a>.btn {
 	float: right;
 	border: none;
 	border-left: solid 1px #ccc;
-	padding: 8.7px 12px;
+	padding: 18.8px 18px;
 }
 .panel-btn-group {
 	padding: 0 0 0 0;
-}
-.panel-body>div>div>div>div>h4 {
-	font-size: 16px;
-}
-.panel-body>div>div>div>div>p {
-	font-size: 10px;
 }
 .panel-body>div>div>.thumbnail {
 	border: solid 1px #fbe7e7;
@@ -112,6 +127,13 @@ a>.btn {
 .panel-body>div>img {
 	height: 280px;
 	width: 308px;
+}
+.panel-heading {
+	padding: 0 0 0 0;
+}
+.panel-heading>.panel-title {
+	margin: 10px 0;
+	padding: 10px 0 10px 10px;
 }
 #imgContainer {
 	height: auto;
@@ -299,14 +321,22 @@ a>.btn {
 	display: inline-block;
 	float: right;
 }
-.panel-heading>.panel-title {
-	margin: 10px 0;
-}
+
 .panel-body>div>ul {
 	margin-top: 10px;
 }
 .panel-title {
 	font-weight: bold;
+}
+.post-content>p {
+	margin: 20px 0 10px 0;
+}
+.post-link:hover {
+	text-decoration: none;
+}
+.post-link>li>h3 {
+	margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 /* Blog Page - Detail Page */
@@ -316,6 +346,8 @@ a>.btn {
 .panel-body>div>.post-content {
 	margin: 30px 10px;
 }
+
+
 
 
 @media (max-width: 900px) {

@@ -25,9 +25,11 @@
 										<div class="thumbnail">
 										 	<a href="{% url 'blogs:project-detail' project.slug %}"><img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
 										 	<div class="caption">
-								        		<h4>{{ project.name }}</h4>
-								        		<p>{{ project.timestamp|timesince }} ago</p>
-								        		<p>{{ project.description }}</p>
+								        		<h3 class="obj-title">{{ project.name|title }}</h3>
+								        		<p class="obj-user">By - {{ project.user|title }}</p>
+								        		<p class="obj-date">{{ project.timestamp|timesince }}</p>
+								        		<p class="obj-date">{{ project.post_set.count }} posts</p>   
+								        		<p class="obj-desc">{{ project.description }}</p>
 								      		</div>
 										</div>
 									</div>

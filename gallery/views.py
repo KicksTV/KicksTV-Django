@@ -16,11 +16,37 @@ from .models import Gallery, Image, User
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 # Create your views here.
-def galleryView(request):
+
+def userGalleryView(request, gallery_user):
+	gallery_user = get_object_or_404(User, username=gallery_user)
+	all_gallery = Gallery.objects.filter(user=gallery_user).order_by("-gallery_date")
+
+	paginator = Paginator(all_gallery, 9)
+	page = request.GET.get('page')
+	try:
+		gallery = paginator.page(page)
+	except PageNotAnInteger:
+		# If page is not an integer, deliver first page.
+		gallery = paginator.page(1)
+	except EmptyPage:
+		# If page is out of range (e.g. 9999), deliver last page of results.
+		gallery = paginator.page(paginator.num_pages)
+	
+	return render(request, 'gallery/user_gallery.html', {
+		'all_gallery': gallery,
+		'user': gallery_user,
+		})
+			
+
+
+
+
+def myGalleryView(request, gallery_user):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	elif request.user.groups.filter(name='Member').exists():
-		all_gallery = Gallery.objects.filter(user=request.user).order_by("-gallery_date")
+		user = get_object_or_404(User, username=gallery_user)
+		all_gallery = Gallery.objects.filter(user=user).order_by("-gallery_date")
 			
 		paginator = Paginator(all_gallery, 9)
 		page = request.GET.get('page')
@@ -33,21 +59,37 @@ def galleryView(request):
 			# If page is out of range (e.g. 9999), deliver last page of results.
 			gallery = paginator.page(paginator.num_pages)
 		
-		return render(request, 'gallery/my_gallery.html', {'all_gallery': gallery})
+		return render(request, 'gallery/my_gallery.html', {
+			'all_gallery': gallery,
+			'user': user,
+
+			})
 
 	else:
 		return render(request, 'notMember.html')
 
-			
-def detailView(request, slug):
+def userDetailView(request, gallery_user, slug):
+	user = get_object_or_404(User, username=gallery_user)
+	gallery = get_object_or_404(Gallery, slug=slug)
+	
+	context = {
+		'user': user,
+		'gallery': gallery,
+	}
+	return render(request, 'gallery/user_gallery_detail.html', context)
+
+
+def myGalleryDetailView(request, gallery_user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
 		gallery = get_object_or_404(Gallery, slug=slug)
-		return render(request, 'gallery/detail.html', {'gallery': gallery})
+		return render(request, 'gallery/my_gallery_detail.html', {'gallery': gallery})
 
 
-def galleryCreate(request):
+
+
+def galleryCreate(request, gallery_user):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -73,7 +115,7 @@ def galleryCreate(request):
 		}
 		return render(request, 'gallery/gallery_form.html', context)
 
-def galleryUpdate(request, slug):
+def galleryUpdate(request, user, slug):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	form = GalleryForm(request.POST or None, instance=gallery)
 	if form.is_valid():
@@ -97,14 +139,14 @@ def galleryUpdate(request, slug):
 		return HttpResponseRedirect(gallery.get_absolute_url())
 	return render(request, 'gallery/gallery_form.html', {'form': form})
 
-def galleryDelete(request, slug):
+def galleryDelete(request, gallery_user, slug):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	gallery.delete()
 	messages.error(request, "Successfully Deleted!")
 	return HttpResponseRedirect('/my_gallery')
 
 
-def imageCreate(request, slug):
+def imageCreate(request, gallery_user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -133,7 +175,7 @@ def imageCreate(request, slug):
 		return render(request, 'gallery/image_form.html', context)
 
 
-def imageDelete(request, slug, image_id):
+def imageDelete(request, gallery_user, slug, image_id):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	image = get_object_or_404(Image, pk=image_id)
 	image.delete()
@@ -143,14 +185,13 @@ def imageDelete(request, slug, image_id):
 def featuredGallery(request):
 	all_gallery = Gallery.objects.filter(is_favorite=True)
 	if all_gallery:
-		
 		return render(request, 'gallery/featured.html', {'object_list': all_gallery})
 	else:
 		return render(request, 'gallery/noFeatured.html')
 
 class GallerySearchListView(ListView):
     model = Gallery
-    template_name = 'gallery/featured.html'
+    template_name = 'gallery/search-gallery.html'
     paginate_by = 10
 
     def get_queryset(self):
@@ -163,7 +204,7 @@ class GallerySearchListView(ListView):
         return all_gallery
 
 
-def galleryFavorite(request, gallery_id):
+def galleryFavorite(request, gallery_user, gallery_id):
 	all_gallery = Gallery.objects.all()
 	gallery = get_object_or_404(Gallery, pk=gallery_id)
 	try:
@@ -178,3 +219,6 @@ def galleryFavorite(request, gallery_id):
 	else:
 		messages.success(request, "Successfully Featured!")
 		return HttpResponseRedirect("/featured")
+
+def searchGallery(request):
+	return render(request, 'gallery/search-gallery.html')

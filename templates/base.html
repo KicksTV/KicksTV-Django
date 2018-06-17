@@ -50,23 +50,24 @@
 						<li class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gallery's&nbsp;<span class="caret"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									<li class="{% block featured_active %}{% endblock %}"><a href="{% url 'featured' %}">Featured Gallery's</a></li>
-									<li role="separator" class="divider"></li>
-									<li class="{% block gallery_active %}{% endblock %}"><a href="{% url 'gallerys:index' %}">My Gallery's</a></li>
+									<li class="{% block featured_active %}{% endblock %}"><a href="{% url 'featured-gallery' %}">Featured Gallery's</a></li>
+									<li class="{% block search_active %}{% endblock %}"><a href="{% url 'search-gallery' %}">Search Gallery's</a></li>
 								</ul>
 							</li>
 						<li class="{% block blog_active %}{% endblock %}"><a href="{% url 'blogs:index' %}">Blog</a></li>
 						<li class="{% block dropbox_active %}{% endblock %}"><a href="{% url 'dropbox:index' %}">Dropbox</a></li>
 					</ul>
-					{% if user.is_authenticated %}
+					{% if request.user.is_authenticated %}
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
-								<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.username }}&nbsp;<span class="caret"></span></a>
+								<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user|title }}&nbsp;<span class="caret"></span></a>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-									<li><a href="#">Profile</a></li>
+									<li class="{% block user_active %}{% endblock %}"><a href="{% url 'user-profile' request.user %}">Profile</a></li>
+									<li class="{% block gallery_active %}{% endblock %}"><a href="{% url 'gallerys:my-gallery' request.user %}">My Gallery's</a></li>
+									<li role="separator" class="divider"></li>
 									<li><a href="{% url 'auth_password_change' %}">Change Password</a></li>
 									<li role="separator" class="divider"></li>
-									{% if user.is_superuser %}
+									{% if request.user.is_superuser %}
 										<li><a href="{% url 'admin:index' %}">Admin</a></li>
 									{% endif %}
 									<li><a href="{% url 'auth_logout' %}">Logout</a></li>
@@ -75,7 +76,7 @@
 						</ul>
 					{% else %}
 						<ul class="nav navbar-nav navbar-right">
-							<li class="{% block login_active %}{% endblock %}"><a href="{% url 'auth_login' %}">Login</a></li>
+							<li class="{% block login_active %}{% endblock %}"><a href="{% url 'auth_login' %}">Login/Sign up</a></li>
 						</ul>
 					{% endif %}
 				</div><!--/.nav-collapse -->

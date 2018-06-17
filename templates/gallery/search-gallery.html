@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Search Gallery Page{% endblock %}
+{% block search_active %}active{% endblock %}
+
+{% block content %}
+	<div class="container" style="margin-top: 50px;">
+		<div class="row">
+			<div class="col-md-offset-9 col-md-3 col-sm-offset-6 col-sm-6">
+				<form role="search" action="{% url 'gallery-search-list-view' %}" method="GET" accept-charset="utf-8">
+					<div class="input-group">
+						<input class="form-control" name="q" type="text" placeholder="Search">
+						<div class="input-group-btn"><button class="btn btn-primary" type="submit">submit</button></div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 20px;">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title" style="display: inline-block;">Searched Gallery's</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row row-fix">
+							<div class="col-md-12">
+								{% if object_list %}
+									<div class="row row-fix">
+									{% for gallery in object_list %}
+										<div class="col-sm-4 col-md-4">	
+											<div class="thumbnail">
+											 	<a href="{% url 'gallerys:user-gallery-detail' gallery.user gallery.slug %}"><img src="{{ gallery.gallery_image.url }}" alt="Missing image for - {{ gallery.gallery_title }}"></a>
+											 	<div class="caption">
+									        		<h3 class="obj-title">{{ gallery.gallery_title|title }}</h3>
+									        		<p class="obj-user">By - {{ gallery.user|title }}</p>
+									        		<p class="obj-date">{{ gallery.gallery_date|timesince }} ago</p>
+									        		<p class="obj-date">{{ gallery.image_set.count }} images</p>
+									        		<p class="obj-desc">{{ gallery.gallery_description }}</p>
+									        		<p>
+									        			{% if user.is_superuser %}
+									        				{% if gallery.is_favorite %}
+																<a href="{% url 'gallerys:favorite' user gallery.slug %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-star"></span></a>
+																{% else %}
+																	<a href="{% url 'gallerys:favorite' user gallery.slug %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-star-empty"></span></a>
+																{% endif %}
+									        			{% endif %}
+									        		</p>
+									      		</div>
+											</div>
+										</div>
+										{% cycle "" "" "</div><div class='row row-fix'>" %}
+									{% endfor %}
+									</div>
+								{% else %}
+									<h3>No results</h3>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

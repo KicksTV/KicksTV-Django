@@ -9,15 +9,18 @@ import kickstvDropbox
 import blog
 
 urlpatterns = [
+    url(r'^$', views.index, name="index"),
     url(r'^admin/', admin.site.urls),
-    url(r'^my_gallery/', include('gallery.urls', namespace='gallerys')),
+    url(r'^gallery/(?P<gallery_user>[\w-]+)/', include('gallery.urls', namespace='gallerys')),
     url(r'^dropbox/', include('kickstvDropbox.urls', namespace='dropbox')),
-    url(r'^featured/', gallery.views.featuredGallery, name='featured'),
     url(r'^blog/', include('blog.urls', namespace='blogs')),
     url(r'^accounts/', include('registration.backends.default.urls')),
-    url(r'^$', views.index, name="index"),
     
+    url(r'^featured/gallerys$', gallery.views.featuredGallery, name='featured-gallery'),
+    url(r'^search/gallerys', gallery.views.searchGallery, name='search-gallery'),
 	url(r'^search/gallery/result$', gallery.views.GallerySearchListView.as_view(), name='gallery-search-list-view'),
+
+    url(r'^(?P<user>[\w-]+)/profile$', views.userProfile, name='user-profile'),
 ]
 
 if settings.DEBUG:

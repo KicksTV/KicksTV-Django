@@ -19,9 +19,9 @@
 	</div>
 	<div class="container" style="height: 550px;">
 		<div class="col-md-12">
-			<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
+			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h3 class="panel-title">Blog</h3>
+					<h3 class="panel-title" style="display: inline-block;">Blog</h3>
 				</div>
 				<div class="panel-body">
 					<div class="col-md-12">
@@ -30,11 +30,13 @@
 								{% for project in all_projects %}
 									<div class="col-xs-12 col-sm-4 col-md-4">	
 										<div class="thumbnail">
-										 	<a href="{% url 'blogs:project-detail' project.id %}"><img class="img-responsive" src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
+										 	<a href="{% url 'blogs:project-detail' project.slug %}"><img class="img-responsive" src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
 										 	<div class="caption">
-								        		<h4>{{ project.name }}</h4>
-								        		<p>{{ project.timestamp|timesince }} ago</p>
-								        		<p>{{ project.description|truncatechars:180 }}</p>
+								        		<h3 class="obj-title">{{ project.name|title }}</h3> 
+								        		<p class="obj-user">By - {{ project.user|title }}</p>
+								        		<p class="obj-date">{{ project.timestamp|timesince }} ago</p>
+								        		<p class="obj-date">{{ project.post_set.count }} posts</p>
+								        		<p class="obj-desc">{{ project.description|truncatechars:180 }}</p>
 								      		</div>
 										</div>
 									</div>

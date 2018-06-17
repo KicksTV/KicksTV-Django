@@ -43,7 +43,10 @@ class Gallery(models.Model):
         return self.gallery_title
 
     def get_absolute_url(self):
-        return reverse("gallerys:detail", kwargs={"slug": self.slug})
+        return reverse("gallerys:detail", kwargs={
+            "slug": self.slug,
+            "user": self.user,
+            })
 
 
 
@@ -92,11 +95,6 @@ def pre_save_image_receiver(sender, instance, *args, **kwargs):
         instance.slug = "%s_%s" %(gallery.user,slugify(gallery.gallery_title))
 
 
-
-
-
-
-
 # These two auto-delete files from filesystem when they are unneeded:
 
 @receiver(models.signals.post_delete, sender=Gallery)
@@ -121,27 +119,30 @@ def auto_delete_file_on_change(sender, instance, *args, **kwargs):
     when corresponding `MediaFile` object is updated
     with new file.
     """
-    print("auto_delete_file is runned")
-
     if not instance.pk:
         print("instance.pk is null")
         return False
-
     gallery_path = str(instance.gallery_image).split("/")
     old_file = gallery_path[1] + "/" + gallery_path[2]
-    print(old_file)
     new_file = instance.slug.replace("_", "/")
-    print(new_file)
     
-
     if not old_file == new_file:
-        old_file_split = str(instance.gallery_image.path).rsplit('/', 1)
-        new_file_split = str(instance.gallery_image.path).rsplit('/', 2)
+        folder_path_to_change = str(instance.gallery_image.path).rsplit('/', 1)
+        folder_path = str(instance.gallery_image.path).rsplit('/', 2)
         new_folder_name = str(new_file).rsplit('/', 1)
-        print(new_file_split[0] + "/" + new_folder_name[1])
-        os.rename(old_file_split[0], new_file_split[0] + "/" + new_folder_name[1])
+        os.rename(folder_path_to_change[0], folder_path[0] + "/" + new_folder_name[1])
+        instance.gallery_image = gallery_path[0] + "/" + gallery_path[1] + "/" + new_folder_name[1] + "/" + gallery_path[3]
+
+        all_images = Image.objects.filter(gallery=instance)
+        if all_images:
+            for image in all_images:
+                if not os.path.isfile(image.image_image.path):
+                    image_path = str(image.image_image).split("/")
+                    print(image_path[0] + "/" + image_path[1] + "/" + new_folder_name[1] + "/" + image_path[3])
+                    image.image_image = image_path[0] + "/" + image_path[1] + "/" + new_folder_name[1] + "/" + image_path[3]
+                    image.save()
 
 
 pre_save.connect(pre_save_gallery_receiver, sender=Gallery)
 pre_save.connect(pre_save_image_receiver, sender=Image)
-# pre_save.connect(auto_delete_file_on_change, sender=Gallery)
+pre_save.connect(auto_delete_file_on_change, sender=Gallery)

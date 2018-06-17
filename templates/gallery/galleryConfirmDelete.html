@@ -12,7 +12,7 @@
 							<button onClick="cancelDelete()" class="btn btn-default">
 								Cancel
 							</button>
-							<a href="{% url 'gallerys:gallery-delete' gallery.slug %}">
+							<a href="{% url 'gallerys:gallery-delete' user gallery.slug %}">
 								<button  class="btn btn-danger">
 										Delete
 								</button>

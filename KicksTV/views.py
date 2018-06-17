@@ -2,7 +2,7 @@ import requests, json
 from django.conf import settings
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.mail import send_mail
 from django.contrib.auth.models import Permission, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -59,3 +59,11 @@ def index(request):
 		'list': data['players']['list'],
 		}
 	return render(request, "index.html", context)
+
+
+def userProfile(request, user):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
+	else:
+		user = get_object_or_404(User, username=user)
+		return render(request, 'user-profile.html')

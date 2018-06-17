@@ -37,7 +37,7 @@ def index(request):
 
 def projectDetailView(request, slug):
 	project = get_object_or_404(Project, slug=slug)
-	all_posts = Post.objects.filter(project=project).order_by("-timestamp")
+	all_posts = Post.objects.filter(project=project).order_by("-publish")
 
 	paginator = Paginator(all_posts, 10) # Show 25 contacts per page
 

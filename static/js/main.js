@@ -24,7 +24,7 @@ function viewImage(con, image_title) {
 	}
 
 	imgContainer.src = con.childNodes[1].src;
-	imgContainerTitle.innerHTML = allText;
+	imgContainerTitle.innerHTML = toTitleCase(allText);
 	greyOverlay.style.display = "block";
 	detailImageContainer.style.display = "block";
 }
@@ -108,4 +108,11 @@ function alertSize() {
 		myHeight = document.body.clientHeight;
 	}
 	return [myWidth, myHeight];
+}
+
+
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
 }
