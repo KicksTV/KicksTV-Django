@@ -32,7 +32,7 @@
 											 	<a href="{% url 'gallerys:user-gallery-detail' gallery.user gallery.slug %}"><img src="{{ gallery.gallery_image.url }}" alt="Missing image for - {{ gallery.gallery_title }}"></a>
 											 	<div class="caption">
 									        		<h3 class="obj-title">{{ gallery.gallery_title|title }}</h3>
-									        		<p class="obj-user">By - {{ gallery.user|title }}</p>
+									        		<p class="obj-default">By - {{ gallery.user|title }}</p>
 									        		<p class="obj-date">{{ gallery.gallery_date|timesince }} ago</p>
 									        		<p class="obj-date">{{ gallery.image_set.count }} images</p>
 									        		<p class="obj-desc">{{ gallery.gallery_description }}</p>

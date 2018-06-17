@@ -60,10 +60,3 @@ def index(request):
 		}
 	return render(request, "index.html", context)
 
-
-def userProfile(request, user):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/accounts/login')
-	else:
-		user = get_object_or_404(User, username=user)
-		return render(request, 'user-profile.html')

@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'registration',
+    
     'gallery.apps.GalleryConfig',
     'kickstvDropbox.apps.KickstvdropboxConfig',
     'blog.apps.BlogConfig',
+    'userProfile.apps.UserprofileConfig',
+    
     'django_cleanup',
     'storages',
     'crispy_forms',

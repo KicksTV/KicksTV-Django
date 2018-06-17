@@ -7,6 +7,7 @@ from . import views
 import gallery
 import kickstvDropbox
 import blog
+import userProfile
 
 urlpatterns = [
     url(r'^$', views.index, name="index"),
@@ -20,7 +21,7 @@ urlpatterns = [
     url(r'^search/gallerys', gallery.views.searchGallery, name='search-gallery'),
 	url(r'^search/gallery/result$', gallery.views.GallerySearchListView.as_view(), name='gallery-search-list-view'),
 
-    url(r'^(?P<user>[\w-]+)/profile$', views.userProfile, name='user-profile'),
+    url(r'^(?P<user>[\w-]+)/profile/', include('userProfile.urls', namespace='profile')),
 ]
 
 if settings.DEBUG:

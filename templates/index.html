@@ -33,7 +33,7 @@
 										 	<a href="{% url 'blogs:project-detail' project.slug %}"><img class="img-responsive" src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
 										 	<div class="caption">
 								        		<h3 class="obj-title">{{ project.name|title }}</h3> 
-								        		<p class="obj-user">By - {{ project.user|title }}</p>
+								        		<p class="obj-default">By - {{ project.user|title }}</p>
 								        		<p class="obj-date">{{ project.timestamp|timesince }} ago</p>
 								        		<p class="obj-date">{{ project.post_set.count }} posts</p>
 								        		<p class="obj-desc">{{ project.description|truncatechars:180 }}</p>
