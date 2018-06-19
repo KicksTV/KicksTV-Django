@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ["0.0.0.0:5000", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    'registration',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,8 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'registration',
-    
+
     'gallery.apps.GalleryConfig',
     'kickstvDropbox.apps.KickstvdropboxConfig',
     'blog.apps.BlogConfig',
@@ -150,13 +151,13 @@ MEDIA_URL = "/media/"
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_root")
 
+REGISTRATION_FORM = 'KicksTV.forms.UserProfileRegistrationForm'
 ACCOUNT_ACTIVATION_DAYS = 2
 REGISTRATION_AUTO_LOGIN = True
 SITE_ID = 1
 LOGIN_REDIRECT_URL = "/"
 EMAIL_HOST = 'localhost'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
-LOGIN_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True

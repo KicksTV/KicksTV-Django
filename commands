@@ -1,3 +1,12 @@
+--- Django commands ---
+
+	python -m django --version
+	django-admin startproject mysite
+	python manage.py startapp polls
+	python manage.py createsuperuser
+
+
+
 --- Heroku ---
 	
 	heroku login
@@ -57,4 +66,26 @@
 
 --- Virtualenv ---
 	virtualenv <my_project>
+
+
+--- Postgres Database ---
+
+	psql postgres	
+	psql (DBNAME)
+
+	sudo su - postgres
+	psql
+	
+	CREATE DATABASE myproject;
+	CREATE USER myprojectuser WITH PASSWORD 'password';
+	GRANT ALL PRIVILEGES ON DATABASE (project) TO (user);
+
+
+	SELECT * FROM pg_stat_activity WHERE datname='kickstvdjango';              # Query for deleting database
+	SELECT pg_terminate_backend (pg_stat_activity.pid) 
+	FROM pg_stat_activity WHERE 	pg_stat_activity.datname='kickstvdjango';
+	DROP DATABASE kickstvdjango;
+	
+	\q       # Quit
+	exit
 

@@ -7,6 +7,10 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import Permission, User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from registration.backends.default.views import RegistrationView
+from .forms import UserProfileRegistrationForm
+from userProfile.models import Profile
+
 from gallery.models import Gallery, Image, User
 from blog.models import Post, Project
 
@@ -21,8 +25,6 @@ def index(request):
 		elif g.gallery_title == "Home Page Mobile Gallery":
 			mobile_gallery = g
 
-	
-	
 	url = "http://mcapi.de/api/server-query/mc.vanillahigh.net/25565"
 	headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"}
 	result = requests.get(url, headers=headers)
@@ -45,9 +47,6 @@ def index(request):
 		# If page is out of range (e.g. 9999), deliver last page of results.
 		project = paginator.page(paginator.num_pages)
 
-
-
-
 	context = {
 		'all_projects': project,
 		'desktop_gallery': desktop_gallery,
@@ -60,3 +59,26 @@ def index(request):
 		}
 	return render(request, "index.html", context)
 
+class MyRegistrationView(RegistrationView):
+    
+    form_class = UserProfileRegistrationForm
+
+
+    def register(self, request, form_class):
+        new_user = super(MyRegistrationView, self).register(request, form_class)
+        new_user.first_name = form_class.cleaned_data['firstName']
+        new_user.last_name = form_class.cleaned_data['lastName']
+        
+    	print("This is never run!!!")
+
+        if form_class.cleaned_data['profileImage']:
+        	profile_image = form_class.cleaned_data['profileImage']
+
+        location = form_class.cleaned_data['location']
+        bio = form_class.cleaned_data['bio']
+        
+        user_profile = Profile.objects.create(user=new_user, profile_image=profile_image, location=location, bio=bio)
+
+        user_profile.save()
+        
+        return new_user

@@ -35,6 +35,8 @@ ALLOWED_HOSTS =  ['kickstv.herokuapp.com', 'django.kickstv.co']
 # Application definition
 
 INSTALLED_APPS = [
+    'registration',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'registration',
-    
+
     # apps
     'gallery.apps.GalleryConfig',
     'kickstvDropbox.apps.KickstvdropboxConfig',
