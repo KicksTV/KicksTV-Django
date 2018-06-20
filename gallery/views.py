@@ -102,20 +102,22 @@ def galleryCreate(request, gallery_user):
 		    file_type = file_type.lower()
 		    if file_type not in IMAGE_FILE_TYPES:
 		        context = {
+		            'formTitle': 'Create Gallery',
 		            'gallery': gallery,
 		            'form': form,
 		            'error_message': 'Image file must be PNG, JPG, or JPEG',
 		        }
-		        return render(request, 'gallery/gallery_form.html', context)
+		        return render(request, 'default-form.html', context)
 		    gallery.save()
 		    messages.success(request, "Successfully Created!")
 		    return HttpResponseRedirect(gallery.get_absolute_url())
 		context = {
-		    "form": form,
+		    'formTitle': 'Create Gallery',
+		    'form': form,
 		}
-		return render(request, 'gallery/gallery_form.html', context)
+		return render(request, 'default-form.html', context)
 
-def galleryUpdate(request, user, slug):
+def galleryUpdate(request, gallery_user, slug):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	form = GalleryForm(request.POST or None, instance=gallery)
 	if form.is_valid():
@@ -126,24 +128,29 @@ def galleryUpdate(request, user, slug):
 			file_type = file_type.lower()
 			if file_type not in IMAGE_FILE_TYPES:
 				context = {
+					'formTitle': 'Update Gallery',
 					'gallery': gallery,
 					'form': form,
 					'error_message': 'Image file must be PNG, JPG, or JPEG',
 					}
-				return render(request, 'gallery/gallery_form.html', context)
+				return render(request, 'default-form.html', context)
 		except MultiValueDictKeyError:
 			gallery.gallery_image = gallery.gallery_image
 
 		form.save()
 		messages.success(request, "Successfully Editted!")
 		return HttpResponseRedirect(gallery.get_absolute_url())
-	return render(request, 'gallery/gallery_form.html', {'form': form})
+	context = {
+		'formTitle': 'Update Gallery',
+		'form': form,
+	}
+	return render(request, 'default-form.html', context)
 
 def galleryDelete(request, gallery_user, slug):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	gallery.delete()
 	messages.error(request, "Successfully Deleted!")
-	return HttpResponseRedirect('/my_gallery')
+	return HttpResponseRedirect(reverse('gallerys:my-gallery', args=[gallery_user]))
 
 
 def imageCreate(request, gallery_user, slug):
@@ -161,18 +168,20 @@ def imageCreate(request, gallery_user, slug):
 		    file_type = file_type.lower()
 		    if file_type not in IMAGE_FILE_TYPES:
 		        context = {
+		            'formTitle': 'Add Image',
 		            'image': image,
 		            'form': form,
 		            'error_message': 'Image file must be PNG, JPG, or JPEG',
 		        }
-		        return render(request, 'gallery/image_form.html', context)
+		        return render(request, 'default-form.html', context)
 		    image.save()
 		    messages.success(request, "Successfully Added!")
 		    return HttpResponseRedirect(gallery.get_absolute_url())
 		context = {
+		    'formTitle': 'Add Image',
 		    "form": form,
 		}
-		return render(request, 'gallery/image_form.html', context)
+		return render(request, 'default-form.html', context)
 
 
 def imageDelete(request, gallery_user, slug, image_id):
@@ -189,6 +198,27 @@ def featuredGallery(request):
 	else:
 		return render(request, 'gallery/noFeatured.html')
 
+
+def galleryFavorite(request, gallery_user, slug):
+	all_gallery = Gallery.objects.all()
+	gallery = get_object_or_404(Gallery, slug=slug)
+	try:
+		if gallery.is_favorite:
+			gallery.is_favorite = False
+		else:
+			gallery.is_favorite = True
+
+		gallery.save()
+	except (KeyError, Gallery.DoesNotExist):
+		return HttpResponse("<h1>Gallery Does Not Exist!</h1>")
+	else:
+		messages.success(request, "Successfully Featured!")
+		return HttpResponseRedirect(reverse('featured-gallery'))
+
+def searchGallery(request):
+	return render(request, 'gallery/search-gallery.html')
+
+
 class GallerySearchListView(ListView):
     model = Gallery
     template_name = 'gallery/search-gallery.html'
@@ -202,23 +232,3 @@ class GallerySearchListView(ListView):
             vectors = SearchVector('gallery_title')
             all_gallery = all_gallery.annotate(search=vectors).filter(search=query)
         return all_gallery
-
-
-def galleryFavorite(request, gallery_user, gallery_id):
-	all_gallery = Gallery.objects.all()
-	gallery = get_object_or_404(Gallery, pk=gallery_id)
-	try:
-		if gallery.is_favorite:
-			gallery.is_favorite = False
-		else:
-			gallery.is_favorite = True
-
-		gallery.save()
-	except (KeyError, Gallery.DoesNotExist):
-		return HttpResponse("<h1>Gallery Does Not Exist!</h1>")
-	else:
-		messages.success(request, "Successfully Featured!")
-		return HttpResponseRedirect("/featured")
-
-def searchGallery(request):
-	return render(request, 'gallery/search-gallery.html')

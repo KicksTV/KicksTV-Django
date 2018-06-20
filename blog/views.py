@@ -69,18 +69,20 @@ def projectAddView(request):
 		    file_type = file_type.lower()
 		    if file_type not in IMAGE_FILE_TYPES:
 		        context = {
+		            'formTitle': 'Create Project',
 		            'newProject': newProject,
 		            'form': form,
 		            'error_message': 'Image file must be PNG, JPG, or JPEG',
 		        }
-		        return render(request, 'blog/blog_form.html', context)
+		        return render(request, 'default-form.html', context)
 		    newProject.save()
 		    messages.success(request, 'Successfully Created!')
 		    return HttpResponseRedirect(newProject.get_absolute_url())
 		context = {
+		    'formTitle': 'Create Project',
 		    "form": form,
 		}
-	return render(request, 'blog/blog_form.html', context)
+	return render(request, 'default-form.html', context)
 
 def projectDeleteView(request, slug):
 	if not request.user.is_authenticated():
@@ -105,11 +107,12 @@ def projectEditView(request, slug):
 			    file_type = file_type.lower()
 			    if file_type not in IMAGE_FILE_TYPES:
 			        context = {
+			            'formTitle': 'Edit Project',
 			            'newProject': newProject,
 			            'form': form,
 			            'error_message': 'Image file must be PNG, JPG, or JPEG',
 			        }
-			        return render(request, 'blog/blog_form.html', context)
+			        return render(request, 'default-form.html', context)
 		    except MultiValueDictKeyError:
 		    	newProject.image = newProject.image
 		    	
@@ -117,9 +120,10 @@ def projectEditView(request, slug):
 		    messages.success(request, 'Successfully Eddited!')
 		    return HttpResponseRedirect(newProject.get_absolute_url())
 		context = {
+		    'formTitle': 'Edit Project',
 		    "form": form,
 		}
-	return render(request, 'blog/blog_form.html', context)
+	return render(request, 'default-form.html', context)
 
 def blogDetailView(request, slug, post_id):
 	
@@ -149,9 +153,10 @@ def blogAddView(request, slug):
 		    messages.success(request, 'Successfully Added!')
 		    return HttpResponseRedirect(newPost.get_absolute_url())
 		context = {
+		    'formTitle': 'Create Post',
 		    "form": form,
 		}
-	return render(request, 'blog/blog_form.html', context)
+	return render(request, 'default-form.html', context)
 
 
 
@@ -179,6 +184,7 @@ def blogEditView(request, slug, post_id):
 		    messages.success(request, 'Successfully Eddited!')
 		    return HttpResponseRedirect(newPost.get_absolute_url())
 		context = {
+		    'formTitle': 'Edit Post',
 		    "form": form,
 		}
-	return render(request, 'blog/blog_form.html', context)
+	return render(request, 'default-form.html', context)

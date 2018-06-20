@@ -1,25 +1,59 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse
+from django.contrib import messages
 
 from django.contrib.auth.models import User, Group
 
 from .models import Profile
+from .forms import ProfileSettings
+
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 # Create your views here.
 
 
 def userProfile(request, user):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/accounts/login')
+	user = get_object_or_404(User, username=user)
+	
+	if user.profile:
+		context = {
+			'user': user,
+			'profile': user.profile,
+		}
+		return render(request, 'userProfile/user-profile.html', context)
+	else:
+		return render(request, 'default-form.html')
+
+def userProfileSettings(request, user):
+	if not request.user.username == user:
+		return HttpResponse('<h1>Cannot edit other uses settings</h1>')
 	else:
 		user = get_object_or_404(User, username=user)
-		profile = Profile.objects.get(user=user)
+		form = ProfileSettings(request.POST or None, request.FILES or None, instance=user.profile)
+		if form.is_valid():
 
-		if profile:
-			context = {
-				'user': user,
-				'profile': profile,
-			}
-			return render(request, 'userProfile/user-profile.html', context)
+			user.first_name = form.cleaned_data['firstName']
+			user.last_name = form.cleaned_data['lastName']
+			profile = form.save(commit=False)
+			profile.user = user
+			profile.profile_image = request.FILES['profile_image']
+			file_type = profile.profile_image.url.split('.')[-1]
+			file_type = file_type.lower()
+			if file_type not in IMAGE_FILE_TYPES:
+				context = {
+					'profile': profile,
+					'form': form,
+					'error_message': 'Image file must be PNG, JPG or JPEG!',
+				}
+				return render(request, 'default-form.html', context)
+			profile.save()
+			user.save()
+			messages.success(request, "Successfully Made Changes!")
+			return HttpResponseRedirect(reverse('profile:index', args=[user]))
+		context = {
+			'formTitle': 'Profile Settings',
+			'form': form,
+		}
 
-		else:
-			return render(request, 'default-form.html')
+		return render(request, 'default-form.html', context)

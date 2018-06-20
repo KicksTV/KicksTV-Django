@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', views.userProfile, name="index"),
+	url(r'^settings/', views.userProfileSettings, name="user-settings"),
 	]

@@ -11,9 +11,9 @@
 				<h3 class="panel-title" style="display: inline-block;">{% if request.user == user %}Your {% else %}{{ user.username|pluralize }}{% endif %}Profile</h3>
 				{% if request.user == user %}
 					<div class="btn-group panel-btn-group">
-						<a href="">
+						<a href="{% url 'profile:user-settings' user %}">
 							<button class="btn btn-default panel-btn">
-								<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 							</button>
 						</a>
 					</div>
@@ -23,20 +23,31 @@
 				<div class="col-md-12">
 					<div class="col-md-5">
 						<div class="thumbnail">
-							<img src="{{ profile.profile_image.url }}">
+							{% if profile.profile_image %}
+								<img src="{{ profile.profile_image.url }}">
+								{% else %}
+									<img src="{% static 'img/default-profile-image.png' %}">
+							{% endif %}
 							<div class="caption">
 								<h3 class="obj-title">{{ user.username|title }}</h3>
-								<p class="obj-default">{% if user.first_name %}{{ user.first_name }}{% endif %}{% if user.last_name %}{{ user.last_name }}{% endif %}</p>
+								<p class="obj-default">{% if user.first_name %}{{ user.first_name }}{% endif %}{% if user.last_name %} {{ user.last_name }}{% endif %}</p>
+								<p class="obj-default">{{ profile.location }}</p>
 								<p class="obj-default">{{ user.email }}</p>
 								<p class="obj-date">{{ user.date_joined|date:"Y/M" }}</p>
 								<p class="obj-desc">{{ profile.bio }}</p>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-md-12">
-					<a href="#">Change profile information?</a><br>
-					<a href="{% url 'auth_password_change' %}">Change password?</a>
+					<div class="col-md-5">
+						<a href="{% url 'gallerys:user-gallery' user %}">
+							<button class="btn btn-primary">
+								View Gallery
+							</button>
+						</a>
+						{% if request.user == user %}
+							<a href="{% url 'auth_password_change' %}"><p>Change password</p></a>
+						{% endif %}
+					</div>
 				</div>
 			</div>
 		</div>

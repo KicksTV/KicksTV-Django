@@ -81,9 +81,8 @@
 	GRANT ALL PRIVILEGES ON DATABASE (project) TO (user);
 
 
-	SELECT * FROM pg_stat_activity WHERE datname='kickstvdjango';              # Query for deleting database
-	SELECT pg_terminate_backend (pg_stat_activity.pid) 
-	FROM pg_stat_activity WHERE 	pg_stat_activity.datname='kickstvdjango';
+	SELECT * FROM pg_stat_activity WHERE datname='kickstvdjango';
+	SELECT pg_terminate_backend (pg_stat_activity.pid) FROM pg_stat_activity WHERE 	pg_stat_activity.datname='kickstvdjango';
 	DROP DATABASE kickstvdjango;
 	
 	\q       # Quit
