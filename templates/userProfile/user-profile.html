@@ -1,56 +1,19 @@
-{% extends 'base.html' %}
-{% block title %}{{ user|title }} Profile Page{% endblock %}
-{% block user_active %}active{% endblock %}
 {% load staticfiles %}
-
-{% block content %}
-<div class="container" style="margin-top: 50px">
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title" style="display: inline-block;">{% if request.user == user %}Your {% else %}{{ user.username|pluralize }}{% endif %}Profile</h3>
-				{% if request.user == user %}
-					<div class="btn-group panel-btn-group">
-						<a href="{% url 'profile:user-settings' user %}">
-							<button class="btn btn-default panel-btn">
-								<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-							</button>
-						</a>
-					</div>
-				{% endif %}
-			</div>
-			<div class="panel-body">
-				<div class="col-md-12">
-					<div class="col-md-5">
-						<div class="thumbnail">
-							{% if profile.profile_image %}
-								<img src="{{ profile.profile_image.url }}">
-								{% else %}
-									<img src="{% static 'img/default-profile-image.png' %}">
-							{% endif %}
-							<div class="caption">
-								<h3 class="obj-title">{{ user.username|title }}</h3>
-								<p class="obj-default">{% if user.first_name %}{{ user.first_name }}{% endif %}{% if user.last_name %} {{ user.last_name }}{% endif %}</p>
-								<p class="obj-default">{{ profile.location }}</p>
-								<p class="obj-default">{{ user.email }}</p>
-								<p class="obj-date">{{ user.date_joined|date:"Y/M" }}</p>
-								<p class="obj-desc">{{ profile.bio }}</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-5">
-						<a href="{% url 'gallerys:user-gallery' user %}">
-							<button class="btn btn-primary">
-								View Gallery
-							</button>
-						</a>
-						{% if request.user == user %}
-							<a href="{% url 'auth_password_change' %}"><p>Change password</p></a>
-						{% endif %}
-					</div>
-				</div>
-			</div>
-		</div>
+<div class="col-md-2">
+	<div class="thumbnail">
+		{% if user.profile.profile_image %}
+			<img src="{{ user.profile.profile_image.url }}">
+			{% else %}
+				<img src="{% static 'img/default-profile-image.png' %}">
+		{% endif %}
 	</div>
 </div>
-{% endblock %}
+<div class="col-md-2">
+	<h3 class="obj-title">{{ user.username|title }}</h3>
+	<p class="obj-default">{{ user.first_name }} {{ user.last_name }}</p>
+	<p class="obj-default">{{ user.profile.location }}</p>
+	<p class="obj-default">{{ user.email }}</p>
+	<p class="obj-date">{{ user.date_joined|date:"Y/M" }}</p>
+	<p class="obj-desc">{{ user.profile.bio }}</p>
+</div>
+

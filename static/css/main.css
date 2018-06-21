@@ -143,6 +143,9 @@ button>a:hover {
 .pagination {
 	float: right;
 }
+.dropdown>a {
+	color: black;
+}
 
 
 

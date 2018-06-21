@@ -18,43 +18,7 @@
 					</div>
 					<div class="panel-body">
 						<div class="col-md-12">
-							{% if all_projects %}
-								<div class="row row-fix">
-								{% for project in all_projects %}
-									<div class="col-sm-4 col-md-4">	
-										<div class="thumbnail">
-										 	<a href="{% url 'blogs:project-detail' project.slug %}"><img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
-										 	<div class="caption">
-								        		<h3 class="obj-title">{{ project.name|title }}</h3>
-								        		<p class="obj-default">By - {{ project.user|title }}</p>
-								        		<p class="obj-date">{{ project.timestamp|timesince }}</p>
-								        		<p class="obj-date">{{ project.post_set.count }} posts</p>   
-								        		<p class="obj-desc">{{ project.description }}</p>
-								      		</div>
-										</div>
-									</div>
-
-									{% cycle "" "" "</div><div class='row row-fix'>" %}
-								{% endfor %}
-								</div>
-								<div class="pagination">
-									<span class="step-links">
-									{% if all_projects.has_previous %}
-										<a href="?page={{ all_projects.previous_page_number }}">previous</a>
-									{% endif %}
-
-									<span class="current">
-										Page {{ all_projects.number }} of {{ all_projects.paginator.num_pages }}.
-									</span>
-
-									{% if all_projects.has_next %}
-										<a href="?page={{ all_projects.next_page_number }}">next</a>
-									{% endif %}
-									</span>
-								</div>
-								{% else %}
-									<h3>No projects!</h3>
-							{% endif %}
+							{% include 'blog/all_projects.html' %}
 						</div>
 					</div>
 				</div>

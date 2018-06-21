@@ -19,9 +19,8 @@ def userProfile(request, user):
 	if user.profile:
 		context = {
 			'user': user,
-			'profile': user.profile,
 		}
-		return render(request, 'userProfile/user-profile.html', context)
+		return render(request, 'userProfile/index.html', context)
 	else:
 		return render(request, 'default-form.html')
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ user|title }} Profile Page{% endblock %}
+{% block user_active %}active{% endblock %}
+
+{% block content %}
+	<div class="container-fluid" style="margin-top: 50px">
+		<div class="row" style="background-color: #f2f3f4;">
+			<div class="col-md-10 col-md-offset-1">
+			{% include 'userProfile/user-profile.html' %}
+			{% include 'userProfile/profile-nav.html' %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
