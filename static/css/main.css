@@ -32,6 +32,10 @@ button>a:hover {
 	color: black;
 	text-decoration: none;
 }
+.btn-group>a>button {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
 .caption>a>div {
 	border-top-left-radius: 4px;
 	border-bottom-left-radius: 4px;
@@ -185,6 +189,8 @@ button>a:hover {
 	position: fixed;
 	height: 100%;
     width: 100%;
+	top: 35px;
+	overflow: hidden;
 }
 #detailImageContainer>.row>div>.thumbnail {
 	border: none;

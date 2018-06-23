@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% load staticfiles %}
+
+{% block content %}
+	<div class="container-fluid" style="margin-top: 50px">
+		<div class="row" style="background-color: #f2f3f4;">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="col-md-2 col-sm-4">
+					<div class="thumbnail">
+						{% if user.profile.profile_image %}
+							<img src="{{ user.profile.profile_image.url }}">
+							{% else %}
+								<img src="{% static 'img/default-profile-image.png' %}">
+						{% endif %}
+					</div>
+				</div>
+				<div class="col-md-2">
+					<h3 class="obj-title">{{ user.username|title }}</h3>
+					<p class="obj-default">{{ user.first_name }} {{ user.last_name }}</p>
+					<p class="obj-default">{{ user.profile.location }}</p>
+					<p class="obj-default">{{ user.email }}</p>
+					<p class="obj-date">{{ user.date_joined|date:"Y/M" }}</p>
+					<p class="obj-desc">{{ user.profile.bio }}</p>
+				</div>
+
+
+				<div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4" style="margin-top: 200px;">
+					<div class="bs-example" data-example-id="nav-tabs-with-dropdown">
+						<ul class="nav nav-tabs">
+							<li role="presentation" class="{% block home_active %}{% endblock %}">
+								<a href="{% url 'profile:index' user %}">Home</a>
+							</li>
+							<li role="presentation" class="{% block gallery_active %}{% endblock %}">
+								<a href="{% url 'gallerys:user-gallery' user %}">Gallery</a>
+							</li>
+							{% if request.user == user %}
+								<li role="presentation" class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+										<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+										<span class="caret"></span>
+									</a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="{% url 'profile:user-settings' user %}">Profile Settings</a>
+										</li>
+										<li>
+											<a href="{% url 'auth_password_change' %}">Change Password</a>
+										</li>
+									</ul>
+								</li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% block profile_content %}
+
+	{% endblock %}
+
+{% endblock %}
+

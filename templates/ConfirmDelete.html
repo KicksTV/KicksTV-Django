@@ -1,0 +1,55 @@
+<div id="whiteContainer" style="display: none;">
+	<div id="confirmDeleteContainer" style="display: none;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 id="confirmDeleteTitle" class="panel-title" style="display: inline-block;"></h3>
+			</div>
+			<div class="panel-body">
+				<div class="col-md-12">
+					<p>Do you want to delete the following object?</p><br>
+					<div class="btn-group" role="group" aria-label="...">
+						<button onClick="cancelDelete()" class="btn btn-default">
+							Cancel
+						</button>
+						<a id="deleteURL" href="">
+							<button  class="btn btn-danger">
+									Delete
+							</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function confirmDelete(title, url, user, slug) {
+	var container = document.getElementById("confirmDeleteContainer");
+	var containerTitle = document.getElementById("confirmDeleteTitle");
+	var whiteContainer = document.getElementById("whiteContainer");
+	var deleteURL = document.getElementById("deleteURL");
+
+
+
+	whiteContainer.style.display = "block";
+	whiteContainer.style.zIndex = "5000";
+
+	if (url == "gallerys:gallery-delete") {
+		var url = "{% url 'gallerys:gallery-delete' 0 99 %}";
+		url = url.replace('0', user);
+		url = url.replace('99', slug);
+
+	}
+	else if (url = "blogs:project-delete") {
+		var url = "{% url 'blogs:project-delete' 99 %}";
+		url = url.replace('99', slug);
+	}
+
+
+	deleteURL.href = url;
+
+
+	containerTitle.innerHTML = title;
+	container.style.display = "block";
+}
+</script>

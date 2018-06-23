@@ -40,34 +40,6 @@ def userGalleryView(request, gallery_user):
 
 
 
-
-def myGalleryView(request, gallery_user):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/accounts/login')
-	elif request.user.groups.filter(name='Member').exists():
-		user = get_object_or_404(User, username=gallery_user)
-		all_gallery = Gallery.objects.filter(user=user).order_by("-gallery_date")
-			
-		paginator = Paginator(all_gallery, 9)
-		page = request.GET.get('page')
-		try:
-			gallery = paginator.page(page)
-		except PageNotAnInteger:
-			# If page is not an integer, deliver first page.
-			gallery = paginator.page(1)
-		except EmptyPage:
-			# If page is out of range (e.g. 9999), deliver last page of results.
-			gallery = paginator.page(paginator.num_pages)
-		
-		return render(request, 'gallery/my_gallery.html', {
-			'all_gallery': gallery,
-			'user': user,
-
-			})
-
-	else:
-		return render(request, 'notMember.html')
-
 def userDetailView(request, gallery_user, slug):
 	user = get_object_or_404(User, username=gallery_user)
 	gallery = get_object_or_404(Gallery, slug=slug)
@@ -77,14 +49,6 @@ def userDetailView(request, gallery_user, slug):
 		'gallery': gallery,
 	}
 	return render(request, 'gallery/user_gallery_detail.html', context)
-
-
-def myGalleryDetailView(request, gallery_user, slug):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/accounts/login')
-	else:
-		gallery = get_object_or_404(Gallery, slug=slug)
-		return render(request, 'gallery/my_gallery_detail.html', {'gallery': gallery})
 
 
 
@@ -150,7 +114,7 @@ def galleryDelete(request, gallery_user, slug):
 	gallery = get_object_or_404(Gallery, slug=slug)
 	gallery.delete()
 	messages.error(request, "Successfully Deleted!")
-	return HttpResponseRedirect(reverse('gallerys:my-gallery', args=[gallery_user]))
+	return HttpResponseRedirect(reverse('gallerys:user-gallery', args=[gallery_user]))
 
 
 def imageCreate(request, gallery_user, slug):

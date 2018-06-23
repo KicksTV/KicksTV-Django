@@ -43,45 +43,6 @@ function getImgSize(imgSrc) {
 	return newImg;
 }
 
-// Code for adding classes to form elements
-window.onload = function addClass() {
-	var inputs = document.getElementsByTagName("input");
-	var labels = document.getElementsByTagName("label");
-
-	for (var i=0;i<inputs.length;i++) {
-		if (inputs[i].id.indexOf("id_") !== -1) {
-			if (inputs[i].type == "text") {
-				inputs[i].classList.add("form-control");
-			}
-		}
-	}
-	for (var i=0;i<labels.length;i++) {
-		if (labels[i].classList.item(0) !== null) {
-			if (labels[i].classList.item(0).indexOf("control-label")) {
-				return;
-			}
-		}else{
-			if (labels[i].id.indexOf("id")) {
-				if (labels[i].innerHTML !== "Gallery image:" && labels[i].innerHTML !== "Image image:" && labels[i].innerHTML !== "Image:") {
-					labels[i].classList.add("input-group-addon");
-				}
-			}
-		}
-	}
-}
-
-function confirmDelete(title) {
-	var container = document.getElementById("confirmDeleteContainer");
-	var containerTitle = document.getElementById("confirmDeleteTitle");
-	var whiteContainer = document.getElementById("whiteContainer");
-
-
-	whiteContainer.style.display = "block";
-	whiteContainer.style.zIndex = "5000";
-
-	containerTitle.innerHTML = title;
-	container.style.display = "block";
-}
 
 function cancelDelete() {
 	var container = document.getElementById("confirmDeleteContainer");

@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'userProfile/base.html' %}
 {% load staticfiles %}
 {% block title %}{{ user }} Gallery Images{% endblock %}
 {% block gallery_active %}active{% endblock %}
 
-{% block content %}
+{% block profile_content %}
 	<div id="grey-overlay"></div> 
 	<div id="detailImageContainer" class="col-md-12 col-sm-12 col-xs-12">
 		<div class="row">
@@ -13,82 +13,110 @@
 					<div class="btn btn-default hidden-xs" onclick="closeImage();" href=""><span class="glyphicon glyphicon-remove"></span></div>
 					<img style="opacity: 1;" id="imgContainer" src="">
 					<div class="caption">
+						<a class="deleteButton" href="">
+							<div class="btn btn-default btn-xs hidden-sm hidden-md hidden-lg">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</div>
+						</a>
+						<a class="deleteButton" href="">
+							<div class="btn btn-default hidden-xs">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+							</div>
+						</a>
 						<h2 id="imgContainerTitle"></h2>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="panel panel-default" >
-					<div class="panel-heading" style="padding: 0 0 0 15px;">
-						<h3 class="panel-title" style="display: inline-block;">{{ user|title }} Profile</h3>
-					</div>
-					<div class="panel-body">
-						<div class="row row-fix">
-							<h1>content</h1>
+	<div class="container-fluid" style="margin-top: 30px;">
+		{% if gallery.user == request.user %}
+			<div class="row" style="background-color: #f2f3f4;margin-bottom: 30px;">
+				<div class="col-md-1 col-md-offset-10">
+					{% if gallery %}
+						<div>
+							<a href="{% url 'gallerys:image-add' user gallery.slug %}">
+								<button class="btn btn-default" style="background-color: #f2f3f4;">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								</button>
+							</a>
 						</div>
-					</div>
+					{% endif %}
 				</div>
 			</div>
-		</div>
+		{% endif %}
 		<div class="row">
-			<div class="col-xs-12 col-sm-4 col-md-3">
-				<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
-					<div class="panel-heading" style="padding: 0 0 0 15px;">
-						{% if gallery %}
-							<h3 class="panel-title" style="display: inline-block;">{{ gallery.gallery_title|title }}</h3>
-						{% else %}
-							<h3 class="panel-title" style="display: inline-block;">Gallery not found</h3>
-						{% endif %}
-					</div>
-					<div class="panel-body">
-						<div class="col-md-12">
-							{% if gallery %}
-								<div class="thumbnail">
-								 	<img style="height: auto;" src="{{ gallery.gallery_image.url }}" alt="...">
-								 	<div class="caption">
-						        		<h3 class="obj-title">{{ gallery.gallery_title|title }}</h3>
-						        		<p class="obj-date">{{ gallery.gallery_date }}</p>
-						        		<p class="obj-desc">{{ gallery.gallery_description }}</p>
-						      		</div>
-						      	</div>
-								{% else %}
-									<h3>No gallery!</h3>
+		<div class="col-md-1"></div>
+			<div class="col-xs-12 col-sm-4 col-md-2">
+				{% if gallery %}
+					<div class="thumbnail">
+					 	<img style="height: auto;" src="{{ gallery.gallery_image.url }}" alt="...">
+					 	<div class="caption">
+			        		
+
+			        		<h3 class="obj-title">{{ gallery.gallery_title|title }}</h3>
+			        		<p class="obj-date">{{ gallery.gallery_date }}</p>
+			        		<p class="obj-desc">{{ gallery.gallery_description }}</p>
+							
+
+							{% if gallery.user == request.user %}
+								<p>	
+									<a>
+										<button class="btn btn-default" onClick='confirmDelete("{{ gallery.gallery_title }}", "{{ gallery.user }}", "{{ gallery.slug }}")'>
+											<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+										</button>
+									</a>
+									<a href="{% url 'gallerys:gallery-update' user gallery.slug %}">
+										<button class="btn btn-default">
+											<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+										</button>
+									</a>
+								{% if user.is_superuser %}
+									{% if gallery.is_favorite %}
+										<a href="{% url 'gallerys:favorite' user gallery.slug %}">
+											<button class="btn btn-default">
+												<span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+											</button>
+										</a>
+									{% else %}
+										<a href="{% url 'gallerys:favorite' user gallery.slug %}">
+											<button class="btn btn-default">
+												<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+											</button>
+										</a>
+									{% endif %}
+								{% endif %}
+								</p>
 							{% endif %}
-						</div>
-					</div>
-				</div>
+
+
+
+			      		</div>
+			      	</div>
+					{% else %}
+						<h3>No gallery!</h3>
+				{% endif %}
 			</div>
 			<div class="col-md-9 col-sm-8 col-xs-12">
-				<div class="panel panel-default" style="padding-right: 0;padding-left: 0; margin-right: 0; margin-right: 0;">
-					<div class="panel-heading" style="padding: 0 0 0 15px;">
-						<h3 class="panel-title" style="display: inline-block;">Images</h3>
-					</div>
-					<div class="panel-body">
-						{% if gallery.image_set.all %}
-							<div class="row row-fix">
-							{% for image in gallery.image_set.all %}
-								<div class="col-xs-6 col-sm-6 col-md-6">
-									<div onclick='viewImage(this, "{{ image.image_title }}"); deleteButton("{{ user }}", "{{ image.id }}", "{{ gallery.slug }}");' class="thumbnail">
-								 		<img class="detailimg" src="{{ image.image_image.url }}" alt="..." style="width: auto;">
-							      	</div>
-								</div>
-								{% cycle "" "</div><div class='row row-fix'>" %}
-							{% endfor %}
-						{% else %}
-							<h3>No images added yet!</h3>
-						{% endif %}
-					</div>
-				</div>
+				{% if gallery.image_set.all %}
+					<div class="row row-fix">
+					{% for image in gallery.image_set.all %}
+						<div class="col-xs-6 col-sm-6 col-md-3">
+							<div onclick='viewImage(this, "{{ image.image_title }}"); deleteButton("{{ user }}", "{{ image.id }}", "{{ gallery.slug }}");' class="thumbnail">
+						 		<img class="detailimg" src="{{ image.image_image.url }}" alt="..." style="width: auto;">
+					      	</div>
+						</div>
+						{% cycle "" "" "" "</div><div class='row row-fix'>" %}
+					{% endfor %}
+				{% else %}
+					<h3>No images added yet!</h3>
+				{% endif %}
 			</div>
 		</div>
 	</div>
 	
 
-	{% include 'gallery/galleryConfirmDelete.html' %}
+
 
 	<script type="text/javascript">
 		

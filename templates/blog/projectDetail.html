@@ -16,8 +16,8 @@
 						{% endif %}
 						<div class="btn-group panel-btn-group">
 							{% if project %}
-								<a href="">
-									<button onClick='confirmDelete("{{ project.name }}")' class="btn btn-default panel-btn">
+								<a>
+									<button onClick='confirmDelete("{{ project.name }}", "blogs:project-delete", "{{ project.user }}", "{{ project.slug }}")' class="btn btn-default panel-btn">
 										<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 									</button>
 								</a>
@@ -97,7 +97,5 @@
 			</div>
 		</div>
 	</div>
-
-	{% include 'blog/projectConfirmDelete.html' %}
 	
 {% endblock %}
