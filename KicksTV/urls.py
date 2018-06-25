@@ -23,13 +23,13 @@ urlpatterns = [
     url(r'^dropbox/', include('kickstvDropbox.urls', namespace='dropbox')),
     
     # Blog Urls
-    url(r'^blog/', include('blog.urls', namespace='blogs')),
+    url(r'^(?P<user>[\w-]+)/blog/', include('blog.urls', namespace='blogs')),
     
     # UserProfile Urls
     url(r'^(?P<user>[\w-]+)/profile/', include('userProfile.urls', namespace='profile')),
     
     # Gallery Urls
-    url(r'^gallery/(?P<gallery_user>[\w-]+)/', include('gallery.urls', namespace='gallerys')),
+    url(r'^(?P<gallery_user>[\w-]+)/gallery/', include('gallery.urls', namespace='gallerys')),
     url(r'^featured/gallerys$', gallery.views.featuredGallery, name='featured-gallery'),
     url(r'^search/gallerys', gallery.views.searchGallery, name='search-gallery'),
 	url(r'^search/gallery/result$', gallery.views.GallerySearchListView.as_view(), name='gallery-search-list-view'),

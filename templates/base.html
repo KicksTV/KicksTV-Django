@@ -54,7 +54,7 @@
 									<li class="{% block search_active %}{% endblock %}"><a href="{% url 'search-gallery' %}">Search Gallery's</a></li>
 								</ul>
 							</li>
-						<li class="{% block blog_active %}{% endblock %}"><a href="{% url 'blogs:index' %}">Blog</a></li>
+						<li class="{% block blog_active %}{% endblock %}"><a href="{% url 'blogs:index' 'kickstv' %}">Blog</a></li>
 						<li class="{% block dropbox_active %}{% endblock %}"><a href="{% url 'dropbox:index' %}">Dropbox</a></li>
 					</ul>
 					{% if request.user.is_authenticated %}

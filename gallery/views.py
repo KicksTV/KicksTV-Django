@@ -32,7 +32,7 @@ def userGalleryView(request, gallery_user):
 		# If page is out of range (e.g. 9999), deliver last page of results.
 		gallery = paginator.page(paginator.num_pages)
 	
-	return render(request, 'gallery/user_gallery.html', {
+	return render(request, 'gallery/index.html', {
 		'all_gallery': gallery,
 		'user': gallery_user,
 		})
@@ -48,7 +48,7 @@ def userDetailView(request, gallery_user, slug):
 		'user': user,
 		'gallery': gallery,
 	}
-	return render(request, 'gallery/user_gallery_detail.html', context)
+	return render(request, 'gallery/gallery_detail.html', context)
 
 
 

@@ -12,8 +12,8 @@ from .forms import PostForm, ProjectForm
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 # Create your views here.
 
-def index(request):
-	user = User.objects.get(username="kickstv")
+def index(request, user):
+	user = User.objects.get(username=user)
 	all_projects = Project.objects.filter(user=user).order_by("-timestamp")
 	
 	
@@ -32,10 +32,12 @@ def index(request):
 
 	context = {
 		'all_projects': project,
+		'user': user,
 	}
 	return render(request, 'blog/index.html', context)
 
-def projectDetailView(request, slug):
+def projectDetailView(request, user, slug):
+	user = get_object_or_404(User, username=user)
 	project = get_object_or_404(Project, slug=slug)
 	all_posts = Post.objects.filter(project=project).order_by("-publish")
 
@@ -54,6 +56,7 @@ def projectDetailView(request, slug):
 	context = {
 		'project': project,
 		'all_posts': post,
+		'user': user,
 	}
 	return render(request, 'blog/projectDetail.html', context)
 
@@ -84,7 +87,7 @@ def projectAddView(request):
 		}
 	return render(request, 'default-form.html', context)
 
-def projectDeleteView(request, slug):
+def projectDeleteView(request, user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -93,7 +96,7 @@ def projectDeleteView(request, slug):
 		messages.error(request, 'Successfully Deleted!')
 		return HttpResponseRedirect('/blog')
 
-def projectEditView(request, slug):
+def projectEditView(request, user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -125,8 +128,8 @@ def projectEditView(request, slug):
 		}
 	return render(request, 'default-form.html', context)
 
-def blogDetailView(request, slug, post_id):
-	
+def blogDetailView(request, user, slug, post_id):
+	user = get_object_or_404(User, username=user)
 	project = get_object_or_404(Project, slug=slug)
 	post = get_object_or_404(Post, pk=post_id)
 
@@ -135,12 +138,13 @@ def blogDetailView(request, slug, post_id):
 	context = {
 		'project': project,
 		'post': post,
+		'user': user,
 	}
 	return render(request, 'blog/postDetail.html', context)
 
 
 
-def blogAddView(request, slug):
+def blogAddView(request, user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -160,7 +164,7 @@ def blogAddView(request, slug):
 
 
 
-def blogDeleteView(request, slug, post_id):
+def blogDeleteView(request, user, slug, post_id):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
@@ -172,7 +176,7 @@ def blogDeleteView(request, slug, post_id):
 
 
 
-def blogEditView(request, slug, post_id):
+def blogEditView(request, user, slug, post_id):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:

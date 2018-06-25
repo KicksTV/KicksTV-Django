@@ -22,7 +22,7 @@ def upload_location(instance, filename):
 
 
 class Project(models.Model):
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, related_name="project_set", on_delete=models.CASCADE)
 	name = models.CharField(max_length=60)
 	image = models.FileField(upload_to=upload_location, 
 		null=False, 
@@ -40,7 +40,10 @@ class Project(models.Model):
 		return self.name
 
 	def get_absolute_url(self):
-		return reverse("blogs:project-detail", kwargs={"slug": self.slug})
+		return reverse("blogs:project-detail", kwargs={
+			"user": self.user,
+			"slug": self.slug,
+			})
 
 
 

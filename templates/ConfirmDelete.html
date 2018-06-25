@@ -23,7 +23,7 @@
 	</div>
 </div>
 <script type="text/javascript">
-function confirmDelete(title, url, user, slug) {
+function confirmDelete(title, url, user, slug, post_id) {
 	var container = document.getElementById("confirmDeleteContainer");
 	var containerTitle = document.getElementById("confirmDeleteTitle");
 	var whiteContainer = document.getElementById("whiteContainer");
@@ -41,7 +41,8 @@ function confirmDelete(title, url, user, slug) {
 
 	}
 	else if (url = "blogs:project-delete") {
-		var url = "{% url 'blogs:project-delete' 99 %}";
+		var url = "{% url 'blogs:project-delete' 0 99 %}";
+		url = url.replace('0', user);
 		url = url.replace('99', slug);
 	}
 

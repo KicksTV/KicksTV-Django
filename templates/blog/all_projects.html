@@ -3,7 +3,7 @@
 	{% for project in all_projects %}
 		<div class="col-sm-4 col-md-4">	
 			<div class="thumbnail">
-			 	<a href="{% url 'blogs:project-detail' project.slug %}"><img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
+			 	<a href="{% url 'blogs:project-detail' user project.slug %}"><img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}"></a>
 			 	<div class="caption">
 	        		<h3 class="obj-title">{{ project.name|title }}</h3>
 	        		<p class="obj-default">By - <a href="{% url 'profile:index' project.user %}">{{ project.user|title }}</a></p>
