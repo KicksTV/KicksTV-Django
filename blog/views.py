@@ -60,10 +60,11 @@ def projectDetailView(request, user, slug):
 	}
 	return render(request, 'blog/projectDetail.html', context)
 
-def projectAddView(request):
+def projectAddView(request, user):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
+		user = get_object_or_404(User, username=user)
 		form = ProjectForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 		    newProject = form.save(commit=False)
@@ -91,10 +92,11 @@ def projectDeleteView(request, user, slug):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	else:
+		user = get_object_or_404(User, username=user)
 		project = get_object_or_404(Project, slug=slug)
 		project.delete()
 		messages.error(request, 'Successfully Deleted!')
-		return HttpResponseRedirect('/blog')
+		return HttpResponseRedirect(reverse('blogs:index', args=[user]))
 
 def projectEditView(request, user, slug):
 	if not request.user.is_authenticated():

@@ -40,10 +40,16 @@ function confirmDelete(title, url, user, slug, post_id) {
 		url = url.replace('99', slug);
 
 	}
-	else if (url = "blogs:project-delete") {
+	else if (url == "blogs:project-delete") {
 		var url = "{% url 'blogs:project-delete' 0 99 %}";
 		url = url.replace('0', user);
 		url = url.replace('99', slug);
+	}
+	else if (url == "blogs:post-delete") {
+		var url = "{% url 'blogs:post-delete' 0 99 88 %}";
+		url = url.replace('0', user);
+		url = url.replace('99', slug);
+		url = url.replace('88', post_id);
 	}
 
 

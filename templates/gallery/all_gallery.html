@@ -1,0 +1,50 @@
+{% if all_gallery %}
+	{% for gallery in all_gallery%}
+		<div class="col-sm-4 col-md-4">	
+			<div class="thumbnail">
+			 	<img class="img-responsive" src="{{ gallery.gallery_image.url }}" alt="Missing image for - {{ gallery.gallery_title }}">
+			 	<div class="caption">
+	        		<h3 class="obj-title">{{ gallery.gallery_title|title }}</h3>
+	        		<p class="obj-date">{{ gallery.gallery_date|timesince }} ago</p>
+	        		<p class="obj-date">{{ gallery.image_set.count }} images</p>
+	        		<p class="obj-desc">{{ gallery.gallery_description|truncatechars:180 }}</p>
+	        		<p>
+	        			<a class="btn btn-primary" href="{% url 'gallerys:user-gallery-detail' gallery.user gallery.slug %}">View</a>
+	        			{% if user.is_superuser %}
+	        				{% if gallery.is_favorite %}
+									<a href="{% url 'gallerys:favorite' gallery.user gallery.slug %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-star"></span></a>
+								{% else %}
+									<a href="{% url 'gallerys:favorite' gallery.user gallery.slug %}" class="btn btn-default" role="button"><span class="glyphicon glyphicon-star-empty"></span></a>
+								{% endif %}
+	        			{% endif %}
+	        		</p>
+	      		</div>
+			</div>
+		</div>
+		
+
+		{% cycle "" "" "</div><div class='row row-fix'>" %}
+	{% endfor %}
+	</div>
+	<div class="pagination">
+		<span class="step-links">
+		{% if all_gallery.has_previous %}
+			<a href="?page={{ all_gallery.previous_page_number }}">previous</a>
+		{% endif %}
+
+		<span class="current">
+			Page {{ all_gallery.number }} of {{ all_gallery.paginator.num_pages }}.
+		</span>
+
+		{% if all_gallery.has_next %}
+			<a href="?page={{ all_gallery.next_page_number }}">next</a>
+		{% endif %}
+		</span>
+	</div>
+{% else %}
+	<h3>No gallerys</h3>
+	</div>
+{% endif %}
+
+
+	

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_cleanup',
     'storages',
     'crispy_forms',
+    'snowpenguin.django.recaptcha2',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -177,3 +178,8 @@ CSRF_COOKIE_SECURE              = False
 SECURE_HSTS_SECONDS             = None
 SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
 SECURE_FRAME_DENY               = False
+
+# RECAPTCHA
+
+RECAPTCHA_PRIVATE_KEY = '6LfX12AUAAAAAAc2iyHkECSTbFSJr2xlay3pIQol'
+RECAPTCHA_PUBLIC_KEY = '6LfX12AUAAAAAKdc_yiBy8kjJpTkp79MQkz-epZP'

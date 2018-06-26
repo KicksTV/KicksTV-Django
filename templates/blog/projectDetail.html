@@ -21,7 +21,7 @@
 					<div class="thumbnail">
 					 	<img src="{{ project.image.url }}" alt="Missing image for - {{ project.name }}">
 					 	<div class="caption">
-			        		<h1 class="obj-title no-margin">{{ project.name|title }}</h1>
+			        		<h3 class="obj-title no-margin">{{ project.name|title }}</h3>
 			        		{% if project.on_going == True %}<p class="tag"><span class="label label-success">On-going</span></p>{% endif %}
 			        		<p class="obj-date">{{ project.timestamp }}</p>
 			        		<p class="obj-desc">{{ project.description }}</p>

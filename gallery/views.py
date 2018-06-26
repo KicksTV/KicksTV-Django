@@ -158,7 +158,19 @@ def imageDelete(request, gallery_user, slug, image_id):
 def featuredGallery(request):
 	all_gallery = Gallery.objects.filter(is_favorite=True)
 	if all_gallery:
-		return render(request, 'gallery/featured.html', {'object_list': all_gallery})
+		paginator = Paginator(all_gallery, 9)
+		page = request.GET.get('page')
+		try:
+			gallery = paginator.page(page)
+		except PageNotAnInteger:
+			# If page is not an integer, deliver first page.
+			gallery = paginator.page(1)
+		except EmptyPage:
+			# If page is out of range (e.g. 9999), deliver last page of results.
+			gallery = paginator.page(paginator.num_pages)
+
+
+		return render(request, 'gallery/featured.html', {'all_gallery': gallery})
 	else:
 		return render(request, 'gallery/noFeatured.html')
 

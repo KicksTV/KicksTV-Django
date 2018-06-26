@@ -4,6 +4,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
+from django.shortcuts import get_object_or_404
 
 from django.utils.text import slugify
 
@@ -47,8 +48,6 @@ class Gallery(models.Model):
             "slug": self.slug,
             "gallery_user": self.user,
             })
-
-
 
 class Image(models.Model):
     gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)
@@ -121,7 +120,13 @@ def auto_delete_file_on_change(sender, instance, *args, **kwargs):
     """
     if not instance.pk:
         print("instance.pk is null")
-        return False
+        return
+
+    if instance.gallery_title:
+        old_gallery = get_object_or_404(Gallery, id=instance.pk)
+        if instance.gallery_title == old_gallery.gallery_title:
+            return
+
     gallery_path = str(instance.gallery_image).split("/")
     old_file = gallery_path[1] + "/" + gallery_path[2]
     new_file = instance.slug.replace("_", "/")
